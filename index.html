@@ -89,8 +89,8 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .mode-toggle button {
-            height: 55px;
-            width: 60px;
+            height: 60pc;
+            width: auto;
             font-size: 16px;
             padding: 10px;
             border: none;
@@ -139,12 +139,12 @@
 <body>
     <div class="chat-container">
     <div class="mode-toggle">
-        <button id="teeth-mode">BarkGPT 1</span>
+        <button id="bark">BarkGPT 1</span>
         </button>
-        <button id="teeth-mode">BarkGPT Llama 3.1
+        <!--<button id="llama">Llama 3.1
                 <span class="beta-badge">Beta</span>
-        </button>
-        <button id="teeth-mode">BarkGPT DeepMind
+        </button>-->
+        <button id="deepmind">DeepMind
                 <span class="beta-badge">Beta</span>
         </button>
     </div>
@@ -166,6 +166,19 @@
     </div>
 
     <script>
+        document.getElementById("bark").addEventListener("click", () => {
+            document.querySelector(".bark").style.display = "block";
+            document.querySelector(".deepmind").style.display = "none";
+            document.getElementById("bark").classList.add("active");
+            document.getElementById("deepmind").classList.remove("active");
+        });
+
+        document.getElementById("deepmind").addEventListener("click", () => {
+            document.querySelector(".bark").style.display = "none";
+            document.querySelector(".deepmind").style.display = "block";
+            document.getElementById("bark").classList.remove("active");
+            document.getElementById("deepmind").classList.add("active");
+        });
         // Функция для отправки сообщения в чат
         async function sendMessage() {
             const input = document.getElementById('chat-input');
