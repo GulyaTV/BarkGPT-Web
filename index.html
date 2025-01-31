@@ -160,7 +160,7 @@
     <div class="deepmind" style="display: none;">
         <div class="chat-header">BarkGPT DeepMind</div>
         <div class="chat-messages" id="chat-messages-deep"></div>
-        <div class="chat-input-deep">
+        <div class="chat-input">
             <input type="text" id="chat-input-deep" placeholder="Введите ваш запрос">
             <button onclick="sendMessage_deep()">Отправить</button>
         </div>
@@ -213,27 +213,35 @@
                 messagesContainer.innerHTML += `<div><strong>Ошибка:</strong> Не удалось получить ответ от сервера.</div>`;
             }
         }
-        async function sendMessage_deep() {
-            const input = document.getElementById('chat-input-deep');
+
+        const messages = [];
+        function addMessage(msg, isUser) {
+            const messagesDiv = document.getElementById("messages");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            if (isUser) {
+                messageDiv.classList.add("user-message");
+            }
+            messageDiv.textContent = msg;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendMessage_deep() {
+            const input = document.getElementById("chat-input-deep");
             const message = input.value.trim();
-            if (!message) return;
-
-            const messagesContainer = document.getElementById('chat-messages-deep');
-            messagesContainer.innerHTML += `<div><strong>Вы:</strong> ${message}</div>`;
-            input.value = '';
-
-            try {
-                const response = await puter.ai.chat(message, {
-                    model: 'deepseek-reasoner', // Расширенная модель
-                    temperature: 0.5,
-                    max_tokens: 100000
+            if (message) {
+                addMessage(message, true);
+                input.value = '';
+                // Record the message in array of messages
+                messages.push({ content: message, role: 'user' });
+                // Call the AI chat function
+                puter.ai.chat(messages).then(response => {
+                    addMessage(response, false);
+                    messages.push(response.message);
+                }).catch(error => {
+                    console.error("AI response error:", error);
                 });
-                
-                messagesContainer.innerHTML += `<div><strong>BarkGPT DeepMind:</strong> ${response.response}</div>`;
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            } catch (error) {
-                console.error('Ошибка:', error);
-                messagesContainer.innerHTML += `<div><strong>Ошибка:</strong> ${error.message}</div>`;
             }
         }
         
