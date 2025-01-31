@@ -237,8 +237,7 @@
                 messages.push({ content: message, role: 'user' }, {content: "Ты BarkGPT DeepMind - искусственный интеллект, созданный Гуля ТВ (GulyaAI)", role: 'system'});
                 // Call the AI chat function
                 puter.ai.chat(messages,
-                              {model: 'gpt-4o', stream: true},
-                              {content: "Ты BarkGPT DeepMind - искусственный интеллект, созданный Гуля ТВ (GulyaAI)", role: 'system'}).then(response => {
+                              {model: 'claude-3-5-sonnet', stream: true}).then(response => {
                     addMessage(response, false);
                     messages.push(response.message);
                 }).catch(error => {
