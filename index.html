@@ -236,7 +236,9 @@
                 // Record the message in array of messages
                 messages.push({ content: message, role: 'user' }, {content: "Ты BarkGPT DeepMind - искусственный интеллект, созданный Гуля ТВ (GulyaAI)", role: 'system'});
                 // Call the AI chat function
-                puter.ai.chat(messages, {model: 'deepseek-reasoner', stream: true}, {content: "Ты BarkGPT DeepMind - искусственный интеллект, созданный Гуля ТВ (GulyaAI)", role: 'system'}).then(response => {
+                puter.ai.chat(messages,
+                              {model: 'gpt-4o', stream: true},
+                              {content: "Ты BarkGPT DeepMind - искусственный интеллект, созданный Гуля ТВ (GulyaAI)", role: 'system'}).then(response => {
                     addMessage(response, false);
                     messages.push(response.message);
                 }).catch(error => {
