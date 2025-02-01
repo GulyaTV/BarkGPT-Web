@@ -156,10 +156,10 @@
     </div>
     <div class="llama" style="display: none;">
         <div class="chat-header">BarkGPT Llamma 3.1</div>
-        <div class="chat-messages" id="chat-messages-llamma"></div>
+        <div class="chat-messages" id="chat-messages-llama"></div>
         <div class="chat-input">
-            <input type="text" id="chat-input-llamma" placeholder="Введите ваш запрос">
-            <button onclick="sendMessage_llamma()">Отправить</button>
+            <input type="text" id="chat-input-llama" placeholder="Введите ваш запрос">
+            <button onclick="sendMessage_llama()">Отправить</button>
         </div>
     </div>
 
@@ -217,7 +217,7 @@
             const message = input.value.trim();
             if (message === '') return;
 
-            const messagesContainer = document.getElementById('chat-messages-llamma');
+            const messagesContainer = document.getElementById('chat-messages-llama');
             messagesContainer.innerHTML += `<div><strong>Вы:</strong> ${message}</div>`;
             input.value = '';
 
@@ -236,7 +236,7 @@
 
                 const data = await response.json();
                 console.log("Received response from server:", data);
-                messagesContainer.innerHTML += `<div><strong>BarkGPT Llama 3.1:</strong> ${data.answer}</div>`;
+                messagesContainer.innerHTML += `<div><strong>BarkGPT Llamma 3.1:</strong> ${data.answer}</div>`;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             } catch (error) {
                 console.error('Ошибка при отправке запроса:', error);
