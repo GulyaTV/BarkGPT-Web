@@ -155,7 +155,7 @@
         </div>
     </div>
     <div class="llama" style="display: none;">
-        <div class="chat-header">BarkGPT Llamma 3.1</div>
+        <div class="chat-header">BarkGPT Llama 3.1</div>
         <div class="chat-messages" id="chat-messages-llama"></div>
         <div class="chat-input">
             <input type="text" id="chat-input-llama" placeholder="Введите ваш запрос">
@@ -236,7 +236,7 @@
 
                 const data = await response.json();
                 console.log("Received response from server:", data);
-                messagesContainer.innerHTML += `<div><strong>BarkGPT Llamma 3.1:</strong> ${data.answer}</div>`;
+                messagesContainer.innerHTML += `<div><strong>BarkGPT Llama 3.1:</strong> ${data.answer}</div>`;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             } catch (error) {
                 console.error('Ошибка при отправке запроса:', error);
