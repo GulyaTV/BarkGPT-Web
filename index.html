@@ -138,7 +138,7 @@
             background-color: #8C6354; /* Темнее Мокко Мусс для hover */
         }
 
-        input[type="text"] {
+        .input-image[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -191,7 +191,7 @@
     </div>
     <div class="image" style="display: none;">
         <div class="chat-header">Gulya AI Image</div>
-        <input type="text" id="prompt" placeholder="Enter a description for the image">
+        <input class="input-image" type="text" id="prompt" placeholder="Enter a description for the image">
         <button onclick="generateImage()">Генерировать изображение</button>
         <p class="status" id="status">Изображение еще не сгенерировано</p>
         <div class="image-container" id="image-container">
