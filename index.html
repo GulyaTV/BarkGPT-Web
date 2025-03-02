@@ -108,9 +108,7 @@
     <div class="chat-container">
     <div class="mode-toggle">
         <button id="bark" class="active">BarkGPT 1</button>
-        <button id="deep">BarkGPT DeepMind
-                <span class="beta-badge">New</span>
-        </button>
+        <button id="deep">Gulya AI Image</button>
         <button id="llama">BarkGPT Llama 3.1
                 <span class="beta-badge">Beta</span>
         </button>
@@ -123,13 +121,15 @@
             <button onclick="sendMessage()">Отправить</button>
         </div>
     </div>
-    <div class="deep" style="display: none;">
-        <div class="chat-header">BarkGPT DeepMind</div>
-        <div class="chat-messages" id="chat-messages-deep"></div>
-        <div class="chat-input">
-            <input type="text" id="chat-input-deep" placeholder="Введите ваш запрос">
-            <button onclick="sendMessage_deep()">Отправить</button>
+    <div class="image" style="display: none;">
+        <div class="chat-header">Gulya AI Image</div>
+        <input type="text" id="prompt" placeholder="Enter a description for the image">
+        <button onclick="generateImage()">Генерировать изображение</button>
+        <p class="status" id="status">Изображение еще не сгенерировано</p>
+        <div class="image-container" id="image-container">
+            <img id="generated-image" alt="Generated image">
         </div>
+        <button class="download-button" id="download-button" onclick="downloadImage()">Скачать (изображение)</button>
     </div>
     <div class="llama" style="display: none;">
         <div class="chat-header">BarkGPT Llama 3.1</div>
@@ -143,28 +143,28 @@
     <script>
         document.getElementById("bark").addEventListener("click", () => {
             document.querySelector(".bark").style.display = "block";
-            document.querySelector(".deep").style.display = "none";
+            document.querySelector(".image").style.display = "none";
             document.querySelector(".llama").style.display = "none";
             document.getElementById("bark").classList.add("active");
-            document.getElementById("deep").classList.remove("active");
+            document.getElementById("image").classList.remove("active");
             document.getElementById("llama").classList.remove("active");
         });
 
-        document.getElementById("deep").addEventListener("click", () => {
+        document.getElementById("image").addEventListener("click", () => {
             document.querySelector(".bark").style.display = "none";
-            document.querySelector(".deep").style.display = "block";
+            document.querySelector(".image").style.display = "block";
             document.querySelector(".llama").style.display = "none";
             document.getElementById("bark").classList.remove("active");
-            document.getElementById("deep").classList.add("active");
+            document.getElementById("image").classList.add("active");
             document.getElementById("llama").classList.remove("active");
         });
 
         document.getElementById("llama").addEventListener("click", () => {
             document.querySelector(".bark").style.display = "none";
-            document.querySelector(".deep").style.display = "none";
+            document.querySelector(".image").style.display = "none";
             document.querySelector(".llama").style.display = "block";
             document.getElementById("bark").classList.remove("active");
-            document.getElementById("deep").classList.remove("active");
+            document.getElementById("image").classList.remove("active");
             document.getElementById("llama").classList.add("active");
         });
         // Функция для отправки сообщения в чат
@@ -264,6 +264,66 @@
                 console.error('Ошибка при отправке запроса:', error);
                 messagesContainer.innerHTML += `<div><strong>Ошибка:</strong> Не удалось получить ответ от сервера.</div>`;
             }
+        }
+        
+        const backendUrl = 'https://bot.gulyatv.ru'; // Замените на ваш URL бэкенда
+
+        async function generateImage() {
+            const prompt = document.getElementById("prompt").value;
+            const status = document.getElementById("status");
+            const imageContainer = document.getElementById("image-container");
+            const image = document.getElementById("generated-image");
+            const downloadButton = document.getElementById("download-button");
+
+            status.textContent = "Generating image...";
+            imageContainer.style.display = "none";
+            downloadButton.style.display = "none";
+
+            try {
+                const response = await fetch(`${backendUrl}/generate`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        width: 1024,
+                        height: 1024
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    status.textContent = "Image generated successfully!";
+                    image.src = result.image_url;
+                    imageContainer.style.display = "block";
+                    downloadButton.style.display = "block";
+                } else {
+                    status.textContent = `Error: ${result.error}`;
+                }
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function downloadImage() {
+            const image = document.getElementById("generated-image");
+            const imageUrl = image.src;
+
+            // Создаём временную ссылку для скачивания
+            fetch(imageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "generated-image.png"; // Имя файла для скачивания
+                    link.click(); // Программный клик по ссылке
+                    URL.revokeObjectURL(link.href); // Освобождаем память
+                })
+                .catch(error => {
+                    console.error("Ошибка при скачивании изображения:", error);
+                });
         }
     </script>
 </body>
